@@ -1,4 +1,4 @@
-Used mySQL to Create the database and the table sperately.
+Used mySQL to create the database and the table sperately.
 ```
 CREATE DATABASE simplerest;
 USE simplerest;
