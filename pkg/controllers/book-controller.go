@@ -24,7 +24,7 @@ func GetBook(w http.ResponseWriter, _ *http.Request) {
 
 func GetBookById(w http.ResponseWriter, r *http.Request) {
 	parameters := mux.Vars(r)
-	bookId := parameters["bookId"]
+	bookId := parameters["ID"]
 	ID, err := strconv.ParseInt(bookId, 0, 0)
 	if err != nil {
 		fmt.Println("error while parsing")
@@ -49,14 +49,18 @@ func CreateBook(w http.ResponseWriter, r *http.Request) {
 
 func DeleteBook(w http.ResponseWriter, r *http.Request) {
 	parameters := mux.Vars(r)
-	bookId := parameters["bookId"]
+	bookId := parameters["ID"]
 	ID, err := strconv.ParseInt(bookId, 0, 0)
 	if err != nil {
 		fmt.Println("error while parsing")
 	}
-	book := models.DeleteBook(ID)
-	res, _ := json.Marshal(book)
+	bookDetails, _ := models.GetBookById(ID)
+	models.DeleteBook(ID)
+	res, _ := json.Marshal(bookDetails)
+	message := (bookId + " " + "is deleted, Deleted Element : ")
+	res1, _ := json.Marshal(message)
 	w.WriteHeader(http.StatusOK)
+	w.Write(res1)
 	w.Write(res)
 }
 
@@ -64,7 +68,7 @@ func UpdateBook(w http.ResponseWriter, r *http.Request) {
 	var updatedBook = &models.Book{}
 	utils.ParseBody(r, updatedBook)
 	parameters := mux.Vars(r)
-	bookId := parameters["bookId"]
+	bookId := parameters["ID"]
 	ID, err := strconv.ParseInt(bookId, 0, 0)
 	if err != nil {
 		fmt.Println("error while parsing")
